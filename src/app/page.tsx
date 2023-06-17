@@ -1,23 +1,13 @@
 'use client';
 
-import { useState } from 'react';
-
-let counter = 0;
+import { signIn } from 'next-auth/react';
 
 export default function Home() {
-  const [name, setName] = useState('');
-
-  const submit = e => {
-    e.preventDefault();
-  };
-
   return (
     <>
-      <form onSubmit={submit}>
-        <input type="text" onChange={e => setName(e.target.value)} />
-      </form>
-
-      {counter++}
+      <button onClick={() => signIn('google')} className="text-xl px-10 py-2 bg-blue-600 rounded text-white mx-auto block">
+        Sign in
+      </button>
     </>
   );
 }
