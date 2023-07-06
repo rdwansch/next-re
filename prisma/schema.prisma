@@ -42,9 +42,8 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-
-  username String? @unique
-  password String?
+  username      String?   @unique
+  password      String?
 }
 
 model VerificationToken {
@@ -53,4 +52,13 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Post {
+  id         String   @id @default(cuid())
+  username   String   @unique
+  content    String   @db.Text
+  image      String
+  totalLikes Int
+  createdAt  DateTime @default(now())
 }
