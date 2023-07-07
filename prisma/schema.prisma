@@ -44,6 +44,7 @@ model User {
   sessions      Session[]
   username      String?   @unique
   password      String?
+  Post          Post[]
 }
 
 model VerificationToken {
@@ -56,9 +57,10 @@ model VerificationToken {
 
 model Post {
   id         String   @id @default(cuid())
-  username   String   @unique
+  email      String
   content    String   @db.Text
-  image      String
-  totalLikes Int
+  image      String?
+  totalLikes Int      @default(0)
   createdAt  DateTime @default(now())
+  user       User     @relation(fields: [email], references: [email])
 }
