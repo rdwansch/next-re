@@ -3,6 +3,13 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        hostname: 'lh3.googleusercontent.com',
+      },
+    ],
+  },
   headers:
     process.env.NODE_ENV === 'development'
       ? () => [
