@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default function SideNav() {
   return (
-    <div className="px-5">
+    <div className="px-5 ">
       <div className="bg-white max-w-xl mx-auto md:w-[15rem] mt-5 p-5 rounded flex flex-col gap-2">
         <h3 className="text-gray-800">Navigations</h3>
         <hr />

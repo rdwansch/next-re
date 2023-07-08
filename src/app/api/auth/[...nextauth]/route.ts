@@ -13,6 +13,11 @@ const handler = NextAuth({
   theme: {
     colorScheme: 'light',
   },
+  callbacks: {
+    session({ session, user }) {
+      return session;
+    },
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
