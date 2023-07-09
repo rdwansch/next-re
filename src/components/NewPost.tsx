@@ -47,7 +47,7 @@ export default function NewPost() {
 
   return (
     <div className="px-5">
-      <div className="bg-white max-w-xl w-[36rem] mx-auto mt-5 p-5 rounded">
+      <div className="bg-white max-w-full w-[36rem] mx-auto mt-5 p-5 rounded">
         <div>
           {session.status == 'authenticated' && (
             <Image src={session?.data?.user?.image + ''} className="rounded-full" alt="Profile" width={50} height={50} />

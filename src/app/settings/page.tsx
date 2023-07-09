@@ -35,93 +35,89 @@ export default function Page() {
     <div>
       <Nav />
       <div className="flex mx-auto max-w-screen-xl justify-center">
-        <div className="mr-auto flex gap-5">
+        <div className="flex flex-col md:flex-row mx-auto max-w-screen-xl">
           <SideNav />
+          <div className="px-5">
+            <div className="max-w-xl  p-5 bg-white mt-5 ">
+              <h1 className="text-2xl font-semibold">Profile</h1>
+              <div className="mt-5">
+                <div className="flex gap-5 items-center border border-gray-200 p-4 rounded-lg">
+                  {!isLoading && (
+                    <Image
+                      className="rounded-full"
+                      src={result?.data.image + ''}
+                      alt={result?.data.name + ''}
+                      width={60}
+                      height={60}
+                    />
+                  )}
+                  {isLoading && <div className="w-[60px] h-[60px] bg-gray-200 rounded-full animate-pulse"></div>}
+                  <div>
+                    {isLoading && <div className="w-[12rem] h-[1rem] bg-gray-200 rounded-lg animate-pulse"></div>}
 
-          <div className="w-[700px] p-5 bg-white mt-5 ">
-            <h1 className="text-2xl font-semibold">Profile</h1>
-            <div className="mt-5">
-              <div className="flex gap-5 items-center border border-gray-200 p-4 rounded-lg">
-                {!isLoading && (
-                  <Image
-                    className="rounded-full"
-                    src={result?.data.image + ''}
-                    alt={result?.data.name + ''}
-                    width={60}
-                    height={60}
-                  />
-                )}
-                {isLoading && <div className="w-[60px] h-[60px] bg-gray-200 rounded-full animate-pulse"></div>}
-                <div>
-                  {isLoading && <div className="w-[12rem] h-[1rem] bg-gray-200 rounded-lg animate-pulse"></div>}
-
-                  <h2 className="text-black text-xl">{result?.data.name}</h2>
-                  <p className="text-gray-500">{result?.data.username || result?.data.email}</p>
+                    <h2 className="text-black text-xl">{result?.data.name}</h2>
+                    <p className="text-gray-500">{result?.data.username || result?.data.email}</p>
+                  </div>
                 </div>
+
+                <div className="mt-5 border border-gray-200 p-4 rounded-lg">
+                  <h2 className="text-lg font-semibold text-gray-600">Personal Information</h2>
+
+                  <table className=" mt-5">
+                    <tbody>
+                      <tr>
+                        <td className="text-sm md:text-base w-[600px] text-gray-500">Name</td>
+
+                        {/*  */}
+                        <td className="text-sm md:text-base w-[600px] text-gray-500">Username</td>
+                      </tr>
+
+                      <tr>
+                        {isLoading && (
+                          <>
+                            <td className="text-sm md:text-base w-[570px] h-[1.2rem] bg-gray-100"></td>
+                            <td className="text-sm md:text-base w-[570px] h-[1.2rem] bg-gray-100"></td>
+                          </>
+                        )}
+
+                        {!isLoading && (
+                          <>
+                            <td className="text-sm md:text-base w-[600px]">{result?.data.name}</td>
+                            <td className="text-sm md:text-base w-[600px]">{result?.data.username || '-'}</td>
+                          </>
+                        )}
+                      </tr>
+
+                      <tr>
+                        <td className="text-sm md:text-base w-[600px] text-gray-500 pt-3">Email Address</td>
+                        <td className="text-sm md:text-base w-[600px] text-gray-500 pt-3">Phone</td>
+                      </tr>
+                      <tr>
+                        {isLoading && (
+                          <>
+                            <td className="text-sm md:text-base w-[570px] h-[1.2rem] bg-gray-100"></td>
+                            <td className="text-sm md:text-base w-[570px] h-[1.2rem] bg-gray-100"></td>
+                          </>
+                        )}
+
+                        {!isLoading && (
+                          <>
+                            <td className="text-sm md:text-base w-[600px]">{result?.data.email}</td>
+                            <td className="text-sm md:text-base w-[600px]">{result?.data.email}</td>
+                          </>
+                        )}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <button
+                  className="text-red-500 border border-red-500 rounded-lg px-5 py-1 block mt-5 ml-auto hover:bg-red-500 hover:text-red-200 transition"
+                  onClick={handleDeleteAccount}
+                >
+                  Delete Account
+                </button>
               </div>
-
-              <div className="mt-5 border border-gray-200 p-4 rounded-lg">
-                <h2 className="text-lg font-semibold text-gray-600">Personal Information</h2>
-
-                <table className=" mt-5">
-                  <tbody>
-                    <tr>
-                      <td className="w-[600px] text-gray-500">Name</td>
-                      <td className="w-[600px] text-gray-500">Username</td>
-                    </tr>
-
-                    <tr>
-                      {isLoading && (
-                        <>
-                          <td className="w-[570px] h-[1.2rem] bg-gray-100"></td>
-                          <td className="w-[570px] h-[1.2rem] bg-gray-100"></td>
-                        </>
-                      )}
-
-                      {!isLoading && (
-                        <>
-                          <td className="w-[600px]">{result?.data.name}</td>
-                          <td className="w-[600px]">{result?.data.username || '-'}</td>
-                        </>
-                      )}
-                    </tr>
-
-                    <tr>
-                      <td className="w-[600px] text-gray-500 pt-3">Email Address</td>
-                      <td className="w-[600px] text-gray-500 pt-3">Phone</td>
-                    </tr>
-                    <tr>
-                      {isLoading && (
-                        <>
-                          <td className="w-[570px] h-[1.2rem] bg-gray-100"></td>
-                          <td className="w-[570px] h-[1.2rem] bg-gray-100"></td>
-                        </>
-                      )}
-
-                      {!isLoading && (
-                        <>
-                          <td className="w-[600px]">{result?.data.email}</td>
-                          <td className="w-[600px]">{result?.data.email}</td>
-                        </>
-                      )}
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <button
-                className="text-gray-500 border border-gray-500 rounded-lg px-5 py-1 block mt-5 ml-auto hover:bg-gray-500 hover:text-gray-200 transition"
-                onClick={handleDeleteAccount}
-              >
-                Edit Account
-              </button>
-
-              <button
-                className="text-red-500 border border-red-500 rounded-lg px-5 py-1 block mt-5 ml-auto hover:bg-red-500 hover:text-red-200 transition"
-                onClick={handleDeleteAccount}
-              >
-                Delete Account
-              </button>
             </div>
           </div>
         </div>
