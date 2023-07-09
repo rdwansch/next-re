@@ -10,6 +10,10 @@ export async function POST(request: Request) {
   const content = formData.get('content') as string;
   const image = formData.get('image') as string;
 
+  if (!session?.user) {
+    return NextResponse.json({ status: ERROR, message: 'Unauthorized' }, { status: 401 });
+  }
+
   if (content?.length == 0) {
     return NextResponse.json({ status: ERROR, message: 'Content is missing' }, { status: 400 });
   }
@@ -84,9 +88,14 @@ export async function GET(request: Request) {
 
 export async function PATCH(request: Request) {
   const formData = await request.formData();
+  const session = await getServerSession();
 
   const likes = formData.get('likes') as string;
   const id = formData.get('id') as string;
+
+  if (!session?.user) {
+    return NextResponse.json({ status: ERROR, message: 'Unauthorized' }, { status: 401 });
+  }
 
   if (likes) {
     await prisma.post.update({

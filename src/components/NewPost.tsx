@@ -33,8 +33,6 @@ export default function NewPost() {
     const res = await fetch('/api/post', { method: 'POST', body: formData });
     const data: Response = await res.json();
 
-    console.log(data);
-
     if (data.status == 'SUCCESS') {
       clearInput();
       mutate('/api/post');
@@ -49,7 +47,7 @@ export default function NewPost() {
 
   return (
     <div className="px-5">
-      <div className="bg-white max-w-xl mx-auto mt-5 p-5 rounded">
+      <div className="bg-white max-w-xl w-[36rem] mx-auto mt-5 p-5 rounded">
         <div>
           {session.status == 'authenticated' && (
             <Image src={session?.data?.user?.image + ''} className="rounded-full" alt="Profile" width={50} height={50} />

@@ -1,6 +1,6 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import LandingPage from '~/components/LandingPage';
 import Nav from '~/components/Nav';
 import PostCard from '~/components/PostCard';
@@ -14,7 +14,11 @@ import fetcher from '~/lib/Fetcher';
 
 export default function Home() {
   const session = useSession();
-  const { data: result, isLoading } = useSWR<{ data: Post[] }>('/api/post', fetcher);
+  const { data: result, isLoading } = useSWR<{ data: Post[] }>(session.status == 'authenticated' && '/api/post', fetcher);
+
+  if (session.status == 'loading') {
+    return <div className="text-center">load</div>;
+  }
 
   if (session.status == 'unauthenticated') {
     return <LandingPage />;
@@ -25,7 +29,10 @@ export default function Home() {
       <>
         <Nav />
 
-        <div className="flex flex-col md:flex-row justify-evenly">
+        <div
+          // className="flex flex-col md:flex-row justify-evenly"
+          className="flex mx-auto max-w-screen-xl"
+        >
           <SideNav />
           <div>
             <NewPost />
