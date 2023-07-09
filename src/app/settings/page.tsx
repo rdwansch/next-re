@@ -38,7 +38,7 @@ export default function Page() {
         <div className="flex flex-col md:flex-row mx-auto max-w-screen-xl">
           <SideNav />
           <div className="px-5">
-            <div className="max-w-xl  p-5 bg-white mt-5 ">
+            <div className="max-w-[1000px]  p-5 bg-white mt-5 ">
               <h1 className="text-2xl font-semibold">Profile</h1>
               <div className="mt-5">
                 <div className="flex gap-5 items-center border border-gray-200 p-4 rounded-lg">
