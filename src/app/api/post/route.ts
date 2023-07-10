@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { prisma } from 'prisma/config';
 import { getServerSession } from 'next-auth/next';
 import { ERROR, SUCCESS } from '~/types/Status';
+import createPost from './createPost';
+import savingPost from './savingPost';
 
 export async function POST(request: Request) {
   const session = await getServerSession();
@@ -9,6 +11,8 @@ export async function POST(request: Request) {
 
   const content = formData.get('content') as string;
   const image = formData.get('image') as string;
+
+  const postId = formData.get('post-id') as string;
 
   if (!session?.user) {
     return NextResponse.json({ status: ERROR, message: 'Unauthorized' }, { status: 401 });
@@ -18,37 +22,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ status: ERROR, message: 'Content is missing' }, { status: 400 });
   }
 
-  try {
-    const post = await prisma.post.create({
-      data: {
-        content,
-        user: {
-          connect: {
-            email: session?.user?.email + '',
-          },
-        },
-      },
-
-      select: {
-        content: true,
-        image: true,
-        totalLikes: true,
-        id: true,
-        createdAt: true,
-        user: {
-          select: {
-            name: true,
-            image: true,
-            username: true,
-          },
-        },
-      },
-    });
-
-    return NextResponse.json({ status: SUCCESS, data: [post] });
-  } catch (err) {
-    console.log('Error on create Post:\n', err);
-    return NextResponse.json({ status: ERROR, message: 'Internal Server Error' }, { status: 500 });
+  switch (true) {
+    case postId != undefined:
+      return savingPost({ postId, session });
+    case content != null:
+      return createPost({ content, session });
   }
 }
 
@@ -74,11 +52,24 @@ export async function GET(request: Request) {
             username: true,
           },
         },
+        savedPost: true,
       },
       orderBy: {
         createdAt: 'desc',
       },
     });
+
+    // let data = [];
+
+    // for (const post of posts) {
+    //   for (const sP of post.savedPost) {
+    //     if (sP.email == session.user.email) {
+    //       data.push({ ...post, isSaved: true });
+    //     }
+    //     data.push({ ...post });
+    //   }
+    // }
+
     return NextResponse.json({ status: SUCCESS, data: posts }, { status: 200 });
   } catch (err) {
     console.log('Error on create Post:\n', err);

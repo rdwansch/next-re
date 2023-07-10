@@ -9,6 +9,8 @@ export default function PostCard({ data }: { data: Post }) {
   const [isLiked, setIsLiked] = useState(false);
   const [totalLikes, setTotalLikes] = useState(data.totalLikes);
 
+  console.log(data);
+
   const handleLikes = async () => {
     if (isLiked) {
       return;
@@ -26,6 +28,13 @@ export default function PostCard({ data }: { data: Post }) {
     }
     setIsLiked(true);
     setTotalLikes(prev => prev + 1);
+  };
+
+  const handleSavingPost = async () => {
+    const formData = new FormData();
+    formData.append('post-id', data.id + '');
+    const response = await fetch('/api/post', { method: 'POST', body: formData });
+    const result = await response.json();
   };
 
   return (
@@ -57,16 +66,18 @@ export default function PostCard({ data }: { data: Post }) {
             </button>
           </div>
 
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width={16}
-            height={16}
-            fill="currentColor"
-            className="bi bi-chat-right"
-            viewBox="0 0 16 16"
-          >
-            <path d="M2 1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h9.586a2 2 0 0 1 1.414.586l2 2V2a1 1 0 0 0-1-1H2zm12-1a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12z" />
-          </svg>
+          <button onClick={handleSavingPost}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width={16}
+              height={16}
+              fill="currentColor"
+              className="bi bi-bookmark"
+              viewBox="0 0 16 16"
+            >
+              <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z" />
+            </svg>
+          </button>
         </div>
       </div>
     </div>
