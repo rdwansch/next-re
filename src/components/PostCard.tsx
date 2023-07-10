@@ -39,7 +39,7 @@ export default function PostCard({ data }: { data: Post }) {
 
   return (
     <div className="px-5">
-      <div className="bg-white max-w-xl w-full mx-auto mt-5 p-5 rounded">
+      <div className="bg-white max-w-full w-[36rem] mx-auto mt-5 p-5 rounded">
         <div className="flex items-center gap-3">
           <Image src={data.user.image} className="rounded-full" alt="Profile" width={50} height={50} />
           <div>
@@ -49,7 +49,7 @@ export default function PostCard({ data }: { data: Post }) {
         </div>
         <div className="mt-5 text-gray-600 max-w-xl w-full" dangerouslySetInnerHTML={{ __html: data.content }} />
 
-        <div className="text-gray-500 mt-5 flex gap-5">
+        <div className="text-gray-500 mt-5 flex items-start gap-2">
           <div className="flex items-center gap-1">
             <button onClick={handleLikes}>
               <svg

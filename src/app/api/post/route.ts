@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from 'prisma/config';
 import { getServerSession } from 'next-auth/next';
 import { ERROR, SUCCESS } from '~/types/Status';
@@ -30,13 +30,47 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   const session = await getServerSession();
+  const searchParams = request.nextUrl.searchParams;
 
   if (!session?.user) {
     return NextResponse.json({ status: ERROR, message: 'Unauthorized' }, { status: 401 });
   }
 
+  if (searchParams.get('saved')) {
+    try {
+      const posts = await prisma.savedPost.findMany({
+        where: {
+          email: session?.user.email + '',
+        },
+        select: {
+          postId: true,
+          post: {
+            select: {
+              content: true,
+              image: true,
+              totalLikes: true,
+              id: true,
+              createdAt: true,
+              user: {
+                select: {
+                  name: true,
+                  image: true,
+                  username: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      return NextResponse.json({ status: SUCCESS, data: posts }, { status: 200 });
+    } catch (err) {
+      console.log('Error on GET SavedPost:\n', err);
+      return NextResponse.json({ status: ERROR, message: 'Internal Server Error' }, { status: 500 });
+    }
+  }
   try {
     const posts = await prisma.post.findMany({
       select: {
@@ -59,20 +93,9 @@ export async function GET(request: Request) {
       },
     });
 
-    // let data = [];
-
-    // for (const post of posts) {
-    //   for (const sP of post.savedPost) {
-    //     if (sP.email == session.user.email) {
-    //       data.push({ ...post, isSaved: true });
-    //     }
-    //     data.push({ ...post });
-    //   }
-    // }
-
     return NextResponse.json({ status: SUCCESS, data: posts }, { status: 200 });
   } catch (err) {
-    console.log('Error on create Post:\n', err);
+    console.log('Error on GET Post:\n', err);
     return NextResponse.json({ status: ERROR, message: 'Internal Server Error' }, { status: 500 });
   }
 }

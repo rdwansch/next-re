@@ -6,15 +6,16 @@ import Nav from '~/components/Nav';
 import PostCard from '~/components/PostCard';
 import SideNav from '~/components/SideNav';
 import NewPost from '~/components/NewPost';
-import { useEffect, useState } from 'react';
 import { Post } from '~/types/Post';
-import { Response } from '~/types/Response';
 import useSWR, { Fetcher } from 'swr';
 import fetcher from '~/lib/Fetcher';
 
 export default function Home() {
   const session = useSession();
-  const { data: result, isLoading } = useSWR<{ data: Post[] }>(session.status == 'authenticated' && '/api/post', fetcher);
+  const { data: result, isLoading } = useSWR<{ data: [{ postId: string; post: Post }] }>(
+    session.status == 'authenticated' && '/api/post?saved=true',
+    fetcher
+  );
 
   if (session.status == 'loading') {
     return <div className="text-center">load</div>;
@@ -23,6 +24,8 @@ export default function Home() {
   if (session.status == 'unauthenticated') {
     return <LandingPage />;
   }
+
+  console.log(result);
 
   if (session.status == 'authenticated')
     return (
@@ -35,20 +38,20 @@ export default function Home() {
         >
           <SideNav />
           <div>
-            <NewPost />
-
             {isLoading && (
               <>
                 <div className="px-5">
-                  <div className="bg-gray-100 animate-pulse max-w-xl mx-auto mt-5 p-5 h-[10rem] rounded"></div>
+                  <div className="bg-gray-100 animate-pulse max-w-[576px] mx-auto mt-5 p-5 h-[160px] rounded"></div>
                 </div>
                 <div className="px-5">
-                  <div className="bg-gray-100 animate-pulse max-w-xl mx-auto mt-5 p-5 h-[10rem] rounded"></div>
+                  <div className="bg-gray-100 animate-pulse max-w-[576px] mx-auto mt-5 p-5 h-[160px] rounded"></div>
                 </div>
               </>
             )}
 
-            {!isLoading && result!.data.map(post => <PostCard key={post.id} data={post} />)}
+            <h1 className="px-5 pt-5 text-2xl font-semibold text-black">Saved Post</h1>
+
+            {!isLoading && result!.data.map(post => <PostCard key={post.postId} data={post.post} />)}
           </div>
 
           <div className="hidden lg:block">

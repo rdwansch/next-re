@@ -18,8 +18,13 @@ interface Data {
 
 export default function Page() {
   const session = useSession();
-  const { isLoading, data: result } = useSWR<{ status: string; data: Data }>('/api/profile', fetcher);
+  const { isLoading, data: result } = useSWR<{ status: string; data: Data }>(
+    session.status == 'authenticated' && '/api/profile',
+    fetcher
+  );
   const router = useRouter();
+
+  console.log(result);
 
   const handleDeleteAccount = async () => {
     if (confirm('Delete Permanently')) {
@@ -45,8 +50,8 @@ export default function Page() {
                   {!isLoading && (
                     <Image
                       className="rounded-full"
-                      src={result?.data.image + ''}
-                      alt={result?.data.name + ''}
+                      src={result?.data?.image || ''}
+                      alt={result?.data?.name + ''}
                       width={60}
                       height={60}
                     />
