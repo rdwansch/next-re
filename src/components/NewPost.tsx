@@ -8,10 +8,10 @@ import { useSession } from 'next-auth/react';
 
 export default function NewPost() {
   const session = useSession();
-
   const { mutate } = useSWRConfig();
-  const inputImageRef = useRef<HTMLInputElement>(null);
+
   const [imageBlob, setImageBlob] = useState<string>();
+  const inputImageRef = useRef<HTMLInputElement>(null);
   const contentPostRef = useRef<HTMLSpanElement>(null);
 
   const handleImageChange = () => {

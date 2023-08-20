@@ -5,15 +5,14 @@ import LandingPage from '~/components/LandingPage';
 import Nav from '~/components/Nav';
 import PostCard from '~/components/PostCard';
 import SideNav from '~/components/SideNav';
-import NewPost from '~/components/NewPost';
 import { Post } from '~/types/Post';
-import useSWR, { Fetcher } from 'swr';
+import useSWR from 'swr';
 import fetcher from '~/lib/Fetcher';
 
 export default function Home() {
   const session = useSession();
   const { data: result, isLoading } = useSWR<{ data: [{ postId: string; post: Post }] }>(
-    session.status == 'authenticated' && '/api/post?saved=true',
+    session.status == 'authenticated' && '/api/post/save',
     fetcher
   );
 
@@ -24,8 +23,6 @@ export default function Home() {
   if (session.status == 'unauthenticated') {
     return <LandingPage />;
   }
-
-  console.log(result);
 
   if (session.status == 'authenticated')
     return (

@@ -11,8 +11,8 @@ import PostCard from './PostCard';
 
 export default function HomePage() {
   const session = useSession();
-
   const { data: result, isLoading } = useSWR<{ data: Post[] }>(session.status == 'authenticated' && '/api/post', fetcher);
+
   return (
     <>
       <Nav />

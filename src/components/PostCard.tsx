@@ -9,8 +9,6 @@ export default function PostCard({ data }: { data: Post }) {
   const [isLiked, setIsLiked] = useState(false);
   const [totalLikes, setTotalLikes] = useState(data.totalLikes);
 
-  console.log(data);
-
   const handleLikes = async () => {
     if (isLiked) {
       return;
@@ -33,7 +31,7 @@ export default function PostCard({ data }: { data: Post }) {
   const handleSavingPost = async () => {
     const formData = new FormData();
     formData.append('post-id', data.id + '');
-    const response = await fetch('/api/post', { method: 'POST', body: formData });
+    const response = await fetch('/api/post/save', { method: 'POST', body: formData });
     const result = await response.json();
   };
 
