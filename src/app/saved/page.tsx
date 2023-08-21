@@ -50,16 +50,6 @@ export default function Home() {
 
             {!isLoading && result!.data.map(post => <PostCard key={post.postId} data={post.post} />)}
           </div>
-
-          <div className="hidden lg:block">
-            <div className="px-5">
-              <div className="bg-white border mx-auto mt-5 p-5 rounded max-w-xs">
-                Ads Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates, fugiat blanditiis eveniet quae
-                sapiente impedit, earum vero, optio amet aperiam nihil nulla? Recusandae asperiores laborum sunt, eum
-                adipisci velit sint.
-              </div>
-            </div>
-          </div>
         </div>
       </>
     );

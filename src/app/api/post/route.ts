@@ -3,12 +3,13 @@ import { prisma } from 'prisma/config';
 import { getServerSession } from 'next-auth/next';
 import { ERROR, SUCCESS } from '~/types/Status';
 
+// Post a card
 export async function POST(request: Request) {
   const session = await getServerSession();
   const formData = await request.formData();
 
   const content = formData.get('content') as string;
-  const image = formData.get('image') as string;
+  const image = formData.get('image') as File;
 
   if (!session?.user) {
     return NextResponse.json({ status: ERROR, message: 'Unauthorized' }, { status: 401 });
@@ -18,10 +19,26 @@ export async function POST(request: Request) {
     return NextResponse.json({ status: ERROR, message: 'Content is missing' }, { status: 400 });
   }
 
+  let uploadedImage = null;
+
+  if (image) {
+    // Upload image to cloudinary
+    const fd = new FormData();
+    fd.append('file', image);
+    fd.append('upload_preset', 'ui2iyrk6');
+    console.log('upload to cloudinary');
+
+    const res = await fetch('https://api.cloudinary.com/v1_1/dxlzmyqwi/image/upload', { method: 'POST', body: fd });
+    const result = await res.json();
+
+    uploadedImage = result.secure_url;
+  }
+
   try {
     const post = await prisma.post.create({
       data: {
         content,
+        image: uploadedImage,
         user: {
           connect: {
             email: session?.user?.email + '',
@@ -52,6 +69,7 @@ export async function POST(request: Request) {
   }
 }
 
+// Get all card
 export async function GET(request: NextRequest) {
   const session = await getServerSession();
 
@@ -74,7 +92,15 @@ export async function GET(request: NextRequest) {
             username: true,
           },
         },
-        savedPost: true,
+        savedPost: {
+          where: {
+            user: {
+              email: {
+                equals: session.user.email,
+              },
+            },
+          },
+        },
       },
       orderBy: {
         createdAt: 'desc',

@@ -21,7 +21,7 @@ export default function Nav() {
               </Link>
             )}
 
-            {session.status == 'authenticated' && (
+            {/* {session.status == 'authenticated' && (
               <div className="md:flex items-center justify-between gap-2 border bg-slate-50 border-fuchsia-500 rounded px-2 py-0.5 w-[300px] hidden">
                 <input
                   type="text"
@@ -44,7 +44,7 @@ export default function Nav() {
                   />
                 </svg>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </div>

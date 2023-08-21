@@ -2,8 +2,10 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import { mutate } from 'swr';
 import { readableDate } from '~/lib/Date';
 import { Post } from '~/types/Post';
+import { SUCCESS } from '~/types/Status';
 
 export default function PostCard({ data }: { data: Post }) {
   const [isLiked, setIsLiked] = useState(false);
@@ -28,11 +30,15 @@ export default function PostCard({ data }: { data: Post }) {
     setTotalLikes(prev => prev + 1);
   };
 
-  const handleSavingPost = async () => {
+  const handleSaveClicked = async () => {
     const formData = new FormData();
     formData.append('post-id', data.id + '');
     const response = await fetch('/api/post/save', { method: 'POST', body: formData });
     const result = await response.json();
+
+    if (result.status === SUCCESS) {
+      mutate('/api/post');
+    }
   };
 
   return (
@@ -46,9 +52,10 @@ export default function PostCard({ data }: { data: Post }) {
           </div>
         </div>
         <div className="mt-5 text-gray-600 max-w-xl w-full" dangerouslySetInnerHTML={{ __html: data.content }} />
+        {data.image && <Image src={data.image} alt={data.content} width={250} height={0} />}
 
         <div className="text-gray-500 mt-5 flex items-start gap-2">
-          <div className="flex items-center gap-1">
+          {/* <div className="flex items-center gap-1">
             <button onClick={handleLikes}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -62,19 +69,18 @@ export default function PostCard({ data }: { data: Post }) {
               </svg>
               <span className="text-xs">{totalLikes}</span>
             </button>
-          </div>
+          </div> */}
 
-          <button onClick={handleSavingPost}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width={16}
-              height={16}
-              fill="currentColor"
-              className="bi bi-bookmark"
-              viewBox="0 0 16 16"
-            >
-              <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z" />
-            </svg>
+          <button onClick={handleSaveClicked}>
+            {data.savedPost.length > 0 ? (
+              <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" viewBox="0 0 16 16">
+                <path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" width={16} height={16} fill="currentColor" viewBox="0 0 16 16">
+                <path d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5V2zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1H4z" />
+              </svg>
+            )}
           </button>
         </div>
       </div>

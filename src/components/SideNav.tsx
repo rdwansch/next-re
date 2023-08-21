@@ -23,7 +23,7 @@ export default function SideNav() {
           <span>Home</span>
         </Link>
 
-        <div className="text-gray-600 flex items-center gap-5">
+        {/* <div className="text-gray-600 flex items-center gap-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width={16}
@@ -36,7 +36,7 @@ export default function SideNav() {
           </svg>
 
           <span>Friend</span>
-        </div>
+        </div> */}
         <Link href={'/saved'} className="text-gray-600 flex items-center gap-5">
           <svg
             xmlns="http://www.w3.org/2000/svg"

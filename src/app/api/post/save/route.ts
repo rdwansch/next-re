@@ -14,6 +14,7 @@ export async function POST(request: Request) {
   }
 
   try {
+    // check if users has saved
     const isSaved = await prisma.savedPost.findFirst({
       where: {
         email: session.user?.email + '',
@@ -23,13 +24,8 @@ export async function POST(request: Request) {
       },
     });
 
-    if (isSaved) {
-      await prisma.savedPost.delete({
-        where: {
-          id: isSaved.id,
-        },
-      });
-    } else {
+    //if never saved create new
+    if (!isSaved) {
       await prisma.savedPost.create({
         data: {
           post: {
@@ -42,6 +38,13 @@ export async function POST(request: Request) {
               email: session?.user?.email + '',
             },
           },
+        },
+      });
+    } else {
+      // Unsaved
+      await prisma.savedPost.delete({
+        where: {
+          id: isSaved.id,
         },
       });
     }
@@ -81,6 +84,7 @@ export async function GET(request: Request) {
                 username: true,
               },
             },
+            savedPost: true,
           },
         },
       },
